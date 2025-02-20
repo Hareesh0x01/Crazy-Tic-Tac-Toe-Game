@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Crazy RGB Tic-Tac-Toe 🎨</title>
+    <style>
+        
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        body {
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            background: black;
+            animation: rgbBackground 5s infinite alternate;
+            color: rgb(87, 5, 94);
+            overflow: hidden;
+        }
+        
+        @keyframes rgbBackground {
+            0% { background: rgb(255, 0, 115); }
+           100% { background: rgb(255, 0, 0); }33% { background: blue; }
+            66% { background: green; }
+            100% { background: purple; }
+        }
+
+        h1 {
+            font-size: 2em;
+            text-shadow: 5px 5px 10px rgb(0, 255, 30);
+            animation: glow 1s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px rgba(213, 63, 111, 0.498); }
+            100% { text-shadow: 0 0 30px cyan; }
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            grid-template-rows: repeat(3, 120px);
+            gap: 8px;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .cell {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: transform 0.3s, background 0.3s;
+            box-shadow: 0 0 15px rgba(175, 84, 84, 0.801);
+        }
+
+        .cell:hover {
+            transform: scale(1.2) rotate(15deg);
+            background: rgb(232, 93, 172);
+        }
+
+        .winner {
+            font-size: 1.5em;
+            margin-top: 20px;
+            background: black;
+            padding: 10px;
+            display: inline-block;
+            border-radius: 10px;
+            text-shadow: 2px 2px 10px rgba(14, 9, 7, 0.071);
+        }
+
+        .reset-btn {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            background: linear-gradient(45deg, red, blue, green, yellow);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px white;
+            transition: all 0.3s;
+        }
+
+        .reset-btn:hover {
+            transform: scale(1.1) rotate(-10deg);
+            box-shadow: 0px 0px 30px cyan;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>🔥 RGB Crazy Tic-Tac-Toe 🔥</h1>
+    <div class="board" id="board"></div>
+    <div class="winner" id="winner"></div>
+    <button class="reset-btn" onclick="resetGame()">Restart Game</button>
+
+    <script>
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let currentPlayer = 'X';
+        let gameActive = true;
+
+        function renderBoard() {
+            const boardElement = document.getElementById('board');
+            boardElement.innerHTML = '';
+            board.forEach((cell, index) => {
+                const cellElement = document.createElement('div');
+                cellElement.classList.add('cell');
+                cellElement.textContent = cell;
+                cellElement.onclick = () => makeMove(index);
+                boardElement.appendChild(cellElement);
+            });
+        }
+
+        function makeMove(index) {
+            if (board[index] === '' && gameActive) {
+                board[index] = currentPlayer;
+                checkWinner();
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                renderBoard();
+            }
+        }
+
+        function checkWinner() {
+            const winningCombos = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], 
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], 
+                [0, 4, 8], [2, 4, 6]
+            ];
+            
+            for (let combo of winningCombos) {
+                const [a, b, c] = combo;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    document.getElementById('winner').innerHTML = `🎉 ${board[a]} Wins! 🎉`;
+                    gameActive = false;
+                    return;
+                }
+            }
+
+            if (!board.includes('')) {
+                document.getElementById('winner').innerHTML = '😲 It\'s a Draw! 😲';
+                gameActive = false;
+            }
+        }
+
+        function resetGame() {
+            board = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'X';
+            gameActive = true;
+            document.getElementById('winner').innerHTML = '';
+            renderBoard();
+        }
+
+        renderBoard();
+    </script>
+</body>
+</html>
+
+
+
+
